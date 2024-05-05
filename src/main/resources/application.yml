@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:${DB_JDBC:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:msHome}
+        url: jdbc:${DB_JDBC:postgresql}://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:mshome}
         username: ${DB_USERNAME:postgres}
         password: ${DB_PASSWORD:postgres}
         driver-class-name: org.postgresql.Driver
