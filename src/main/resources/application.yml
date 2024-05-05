@@ -30,8 +30,8 @@ minio:
     url: ${MINIO_SERVICE_URL:http://localhost}
     port: ${MINIO_SERVICE_PORT:9000}
     bucket: ${MINIO_SERVICE_BUCKET:house}
-    access: ${MINIO_SERVICE_ACCESS_KEY:ms-home}
-    secret: ${MINIO_SERVICE_SECRET_KEY:ms-home2024}
+    access: ${MINIO_SERVICE_ACCESS_KEY:minioadmin}
+    secret: ${MINIO_SERVICE_SECRET_KEY:minioadmin}
 
 jwt:
     secret: secret_key
