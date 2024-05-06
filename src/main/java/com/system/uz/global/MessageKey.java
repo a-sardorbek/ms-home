@@ -19,8 +19,9 @@ public interface MessageKey {
 
     String FILE_NOT_SUPPORTED = "file.not.supported";
     String MINIO_FAILED = "file.failed";
-    String IMAGE_NOT_FOUND = "image.not.found";
+    String IMAGE_NOT_FOUND = "file.not.found";
     String PHONE_ALREADY_EXISTS = "phone.already.exist";
     String PHONE_INCORRECT_FORMAT = "phone.incorrect.format";
     String BLOG_TYPE_CANNOT_BE_APPLIED = "blog.type.not.acceptable.for.product";
+    String FILE_CANNOT_BE_EMPTY = "file.cannot.be.empty";
 }

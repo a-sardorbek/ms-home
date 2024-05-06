@@ -10,13 +10,18 @@ import static com.system.uz.base.BaseUri.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(API_V1 + PHOTO)
+@RequestMapping(API_V1 + FILE)
 public class ImageController {
 
     private final ImageService imageService;
 
     @GetMapping
+    public ResponseEntity<Resource> downloadFile() {
+        return imageService.downloadFile("", true);
+    }
+
+    @GetMapping(PHOTO)
     public ResponseEntity<Resource> download(@RequestParam("photoId") String photoId) {
-        return imageService.downloadFile(photoId);
+        return imageService.downloadFile(photoId, false);
     }
 }

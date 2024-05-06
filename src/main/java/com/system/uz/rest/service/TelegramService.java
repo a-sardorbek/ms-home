@@ -3,8 +3,10 @@ package com.system.uz.rest.service;
 import com.system.uz.enums.*;
 import com.system.uz.env.MinioServiceEnv;
 import com.system.uz.global.Utils;
+import com.system.uz.rest.domain.FrequentInfo;
 import com.system.uz.rest.domain.admin.User;
 import com.system.uz.rest.domain.telegram.TelegramUser;
+import com.system.uz.rest.repository.FrequentInfoRepository;
 import com.system.uz.rest.repository.TelegramUserRepository;
 import com.system.uz.rest.repository.UserRepository;
 import io.minio.GetObjectArgs;
@@ -36,6 +38,7 @@ public class TelegramService {
     private final MinioClient minioClient;
     private final UserRepository userRepository;
     private final TelegramUserRepository telegramUserRepository;
+    private final FrequentInfoRepository frequentInfoRepository;
 
     public SendMessage defaultResponse(String chatId) {
         SendMessage sendMessage = new SendMessage();
@@ -93,14 +96,20 @@ public class TelegramService {
     public SendMessage getCallBackData(String data, String chatId) {
         TelegramLang lang;
         switch (data) {
-            case "UZB":
-                lang = TelegramLang.UZB;
-                break;
             case "ENG":
                 lang = TelegramLang.ENG;
                 break;
-            default:
+            case "RUS":
                 lang = TelegramLang.RUS;
+                break;
+            case "QUESTION":
+                return frequentInfo(chatId, InfoType.QUESTION);
+            case "MATERIAL":
+                return frequentInfo(chatId, InfoType.MATERIAL);
+            case "PRODUCTION":
+                return frequentInfo(chatId, InfoType.PRODUCTION);
+            default:
+                lang = TelegramLang.UZB;
         }
 
         Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
@@ -126,6 +135,41 @@ public class TelegramService {
         return sendMessage;
     }
 
+    private SendMessage frequentInfo(String chatId, InfoType type) {
+        SendMessage sendMessage = new SendMessage();
+
+        TelegramLang lang = TelegramLang.UZB;
+        Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            lang = user.getLang() != null ? user.getLang() : TelegramLang.UZB;
+
+        }
+
+        Optional<TelegramUser> optionalTelegramUser = telegramUserRepository.findByChatId(chatId);
+        if (optionalTelegramUser.isPresent()) {
+            TelegramUser telegramUser = optionalTelegramUser.get();
+            lang = telegramUser.getLang() != null ? telegramUser.getLang() : TelegramLang.UZB;
+        }
+
+
+        List<FrequentInfo> frequentInfos = frequentInfoRepository.findTop10ByTypeOrderByIdDesc(type);
+        List<String> texts = new ArrayList<>();
+        int index = 0;
+        for(int i = 0; i < frequentInfos.size(); i++){
+            index = i + 1;
+                String text = String.format(
+                        TelegramMessageType.FREQUENT_INFO.getMessage(),
+                        index + ") "+Utils.getLanguage(frequentInfos.get(i).getQuestionUz(), frequentInfos.get(i).getQuestionRu(), frequentInfos.get(i).getQuestionEng(), lang),
+                        Utils.getLanguage(frequentInfos.get(i).getAnswerUz(), frequentInfos.get(i).getAnswerRu(), frequentInfos.get(i).getAnswerEng(), lang));
+            texts.add(text);
+        }
+
+        sendMessage.setText(texts.isEmpty() ? TelegramMessage.DEFAULT_MESSAGE.getName(lang) : Utils.convertToString(texts));
+        sendMessage.setChatId(chatId);
+        return sendMessage;
+    }
+
 
     public ReplyKeyboardMarkup getReplyButtons(TelegramLang lang, boolean showContact) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
@@ -141,6 +185,10 @@ public class TelegramService {
             KeyboardButton languageButtons = new KeyboardButton();
             languageButtons.setText(TelegramMessage.CHANGE_LANGUAGE.getName(lang));
             row.add(languageButtons);
+
+            KeyboardButton frequentButtons = new KeyboardButton();
+            frequentButtons.setText(TelegramMessage.FREQUENT_INFO.getName(lang));
+            row.add(frequentButtons);
         }
 
         keyboard.add(row);
@@ -164,6 +212,29 @@ public class TelegramService {
         english.setCallbackData("ENG");
 
         inlineKeyboardMarkup.setKeyboard(List.of(List.of(uzbek, russian, english)));
+
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getFrequentInlineButtons(TelegramLang lang) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<InlineKeyboardButton> questions = new ArrayList<>();
+
+        InlineKeyboardButton question = new InlineKeyboardButton(InfoType.QUESTION.getName(lang));
+        question.setCallbackData("QUESTION");
+        questions.add(question);
+
+        List<InlineKeyboardButton> materials = new ArrayList<>();
+        InlineKeyboardButton material = new InlineKeyboardButton(InfoType.MATERIAL.getName(lang));
+        material.setCallbackData("MATERIAL");
+        materials.add(material);
+
+        List<InlineKeyboardButton> productions = new ArrayList<>();
+        InlineKeyboardButton production = new InlineKeyboardButton(InfoType.PRODUCTION.getName(lang));
+        production.setCallbackData("PRODUCTION");
+        productions.add(production);
+
+        inlineKeyboardMarkup.setKeyboard(List.of(questions, materials, productions));
 
         return inlineKeyboardMarkup;
     }

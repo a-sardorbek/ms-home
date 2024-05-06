@@ -13,10 +13,9 @@ public enum TelegramMessageType {
             TelegramEmoji.NEXT + "\t %s\n"
     ),
 
-    ADMIN_USER_LANGUAGE_SAVED(
-            TelegramEmoji.USER + "\t%s\n" +
-            TelegramEmoji.LANGUAGE + "\t%s\n" +
-            TelegramEmoji.ADD + "\t%s\n"
+    FREQUENT_INFO(
+            "\t%s\n" +
+            "\t%s\n\n"
     ),
 
     USER_LANGUAGE_SAVED(

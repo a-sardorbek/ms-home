@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +30,6 @@ public class FrequentCreateReq {
     @NotBlank(message = "answerEng is mandatory")
     private String answerEng;
 
-    @NotBlank(message = "type is mandatory")
+    @NotNull(message = "type is mandatory")
     private InfoType type;
 }

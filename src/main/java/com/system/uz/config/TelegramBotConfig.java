@@ -76,6 +76,11 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                     sendMessage.setReplyMarkup(telegramService.getLanguageInlineButtons());
                     sendMessage.setChatId(chatId);
                     execute(sendMessage);
+                }else if (messageText.equals(TelegramMessage.FREQUENT_INFO.getName(lang))) {
+                    sendMessage.setText(TelegramMessage.FREQUENT_INFO.getName(lang));
+                    sendMessage.setReplyMarkup(telegramService.getFrequentInlineButtons(lang));
+                    sendMessage.setChatId(chatId);
+                    execute(sendMessage);
                 }else {
                     execute(telegramService.defaultResponse(String.valueOf(update.getMessage().getChatId())));
                 }
@@ -83,8 +88,6 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                 //todo: frequesnt info
 
                 //todo: product images also plan images
-
-                //todo: request to qayta aloqa
 
             }
 

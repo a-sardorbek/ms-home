@@ -4,6 +4,7 @@ public class TelegramEmoji {
     public static final String UZ = "\uD83C\uDDFA\uD83C\uDDFF"; //
     public static final String RU = "\uD83C\uDDF7\uD83C\uDDFA"; //
     public static final String EN = "\uD83C\uDDEC\uD83C\uDDE7"; //
+    public static final String QUESTION = "❔"; //
     public static final String PHONE = "\uD83D\uDCF1"; //
     public static final String SEARCH = "\uD83D\uDD0D"; //
     public static final String BOOKS = "\uD83D\uDCDA"; //

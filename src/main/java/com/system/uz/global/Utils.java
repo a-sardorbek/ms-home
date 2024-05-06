@@ -2,12 +2,14 @@ package com.system.uz.global;
 
 
 import com.system.uz.enums.Lang;
+import com.system.uz.enums.TelegramLang;
 import com.system.uz.exceptions.BadRequestException;
 import com.system.uz.rest.model.admin.criteria.PageSize;
 import org.springframework.util.StringUtils;
 
 import java.security.SecureRandom;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
@@ -42,13 +44,35 @@ public class Utils {
 
     public static String getLanguage(String uz, String ru, String eng) {
         switch (GlobalVar.getLANG()) {
-            case UZB:
-                return uz;
+            case RUS:
+                return ru;
             case ENG:
                 return eng;
             default:
-                return ru;
+                return uz;
         }
+    }
+
+    public static String getLanguage(String uz, String ru, String eng, TelegramLang lang) {
+        switch (lang) {
+            case RUS:
+                return ru;
+            case ENG:
+                return eng;
+            default:
+                return uz;
+        }
+    }
+
+    public static String convertToString(List<String> stringList) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (String str : stringList) {
+            stringBuilder.append(str);
+            stringBuilder.append("\n");
+        }
+
+        return stringBuilder.toString();
     }
 
     public static boolean isEmpty(String str) {

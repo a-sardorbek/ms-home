@@ -35,13 +35,13 @@ public class Category extends BaseEntity {
     @Column(name = "title_eng")
     private String titleEng;
 
-    @Column(name = "description_uz")
+    @Column(name = "description_uz", columnDefinition = "TEXT")
     private String descriptionUz;
 
-    @Column(name = "description_ru")
+    @Column(name = "description_ru", columnDefinition = "TEXT")
     private String descriptionRu;
 
-    @Column(name = "description_eng")
+    @Column(name = "description_eng", columnDefinition = "TEXT")
     private String descriptionEng;
 
 }

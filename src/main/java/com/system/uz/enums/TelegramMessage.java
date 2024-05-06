@@ -62,16 +62,16 @@ public enum TelegramMessage implements Serializable {
         }
     },
 
-    REQUEST_PHONE_CALL {
+    FREQUENT_INFO {
         @Override
         public String getName(TelegramLang language) {
             switch (language) {
                 case UZB:
-                    return TelegramEmoji.PHONE + " Konsultatsiyaga yozdiriling";
+                    return "Ma'lumot olish";
                 case ENG:
-                    return TelegramEmoji.PHONE + " Konsultatsiyaga yozdiriling";
+                    return "Получить информацию";
                 default:
-                    return TelegramEmoji.PHONE + " Запишитесь на консультацию";
+                    return "Information";
             }
         }
     },

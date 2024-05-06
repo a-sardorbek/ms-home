@@ -19,6 +19,7 @@ public interface BaseUri {
     String BY_ID = "/by-id";
     String LOGIN = "/login";
     String REGISTER = "/register";
+    String FILE = "/file";
     String LOGOUT = "/logout";
     String CHANGE_PASSWORD = "/change-password";
     String SEND_OTP = "/send-otp";

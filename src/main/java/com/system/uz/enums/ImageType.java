@@ -44,6 +44,20 @@ public enum ImageType implements Serializable {
                     return "";
             }
         }
+    },
+
+    FILE {
+        @Override
+        public String getName(Lang language) {
+            switch (language) {
+                case UZB:
+                case ENG:
+                case RUS:
+                    return "FILE";
+                default:
+                    return "";
+            }
+        }
     };
 
 
