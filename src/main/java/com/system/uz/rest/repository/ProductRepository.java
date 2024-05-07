@@ -15,6 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findAllByCategoryId(String categoryId, Pageable pageable);
     List<Product> findTop50ByCategoryIdOrderByIdDesc(String categoryId);
+    List<Product> findTop30ByCategoryIdOrderByIdDesc(String categoryId);
     List<Product> findTop50ByOrderByIdDesc();
 
 }

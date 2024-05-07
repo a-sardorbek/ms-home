@@ -15,6 +15,7 @@ public interface ImageRepository extends JpaRepository<Image, Long> {
     Optional<Image> findByBlogId(String blogId);
     List<Image> findAllByProductId(String productId);
     List<Image> findAllByProductIdAndType(String productId, ImageType type);
+    List<Image> findAllByProductIdIn(List<String> productId);
     Optional<Image> findByImageId(String photoId);
     Optional<Image> findByProductIdAndImageId(String productId, String photoId);
 

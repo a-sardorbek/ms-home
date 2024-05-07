@@ -3,22 +3,21 @@ package com.system.uz.rest.service;
 import com.system.uz.enums.*;
 import com.system.uz.env.MinioServiceEnv;
 import com.system.uz.global.Utils;
+import com.system.uz.rest.domain.Category;
 import com.system.uz.rest.domain.FrequentInfo;
+import com.system.uz.rest.domain.Image;
+import com.system.uz.rest.domain.Product;
 import com.system.uz.rest.domain.admin.User;
 import com.system.uz.rest.domain.telegram.TelegramUser;
-import com.system.uz.rest.repository.FrequentInfoRepository;
-import com.system.uz.rest.repository.TelegramUserRepository;
-import com.system.uz.rest.repository.UserRepository;
+import com.system.uz.rest.repository.*;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Contact;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -39,6 +38,9 @@ public class TelegramService {
     private final UserRepository userRepository;
     private final TelegramUserRepository telegramUserRepository;
     private final FrequentInfoRepository frequentInfoRepository;
+    private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
+    private final ProductRepository productRepository;
 
     public SendMessage defaultResponse(String chatId) {
         SendMessage sendMessage = new SendMessage();
@@ -93,7 +95,7 @@ public class TelegramService {
     }
 
 
-    public SendMessage getCallBackData(String data, String chatId) {
+    public List<SendMessage> getCallBackData(String data, String chatId) {
         TelegramLang lang;
         switch (data) {
             case "ENG":
@@ -102,6 +104,9 @@ public class TelegramService {
             case "RUS":
                 lang = TelegramLang.RUS;
                 break;
+            case "UZB":
+                lang = TelegramLang.UZB;
+                break;
             case "QUESTION":
                 return frequentInfo(chatId, InfoType.QUESTION);
             case "MATERIAL":
@@ -109,7 +114,7 @@ public class TelegramService {
             case "PRODUCTION":
                 return frequentInfo(chatId, InfoType.PRODUCTION);
             default:
-                lang = TelegramLang.UZB;
+                return productList(chatId, data);
         }
 
         Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
@@ -132,10 +137,31 @@ public class TelegramService {
         sendMessage.setText(String.format(TelegramMessageType.USER_LANGUAGE_SAVED.getMessage(), lang.getName(), "#success"));
         sendMessage.setReplyMarkup(getReplyButtons(lang, false));
         sendMessage.setChatId(chatId);
-        return sendMessage;
+        return List.of(sendMessage);
     }
 
-    private SendMessage frequentInfo(String chatId, InfoType type) {
+    private List<SendMessage> productList(String chatId, String data) {
+        List<Product> products = productRepository.findTop30ByCategoryIdOrderByIdDesc(data);
+        List<String> productIds = new ArrayList<>();
+        List<SendMessage> sendMessages = new ArrayList<>();
+
+        for(Product product: products){
+            productIds.add(product.getProductId());
+        }
+
+        List<Image> images = imageRepository.findAllByProductIdIn(productIds);
+
+        for (Image image: images){
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(chatId);
+            sendMessage.setText(image.getFullPath());
+            sendMessages.add(sendMessage);
+        }
+
+        return sendMessages;
+    }
+
+    private List<SendMessage> frequentInfo(String chatId, InfoType type) {
         SendMessage sendMessage = new SendMessage();
 
         TelegramLang lang = TelegramLang.UZB;
@@ -167,31 +193,42 @@ public class TelegramService {
 
         sendMessage.setText(texts.isEmpty() ? TelegramMessage.DEFAULT_MESSAGE.getName(lang) : Utils.convertToString(texts));
         sendMessage.setChatId(chatId);
-        return sendMessage;
+        return List.of(sendMessage);
     }
 
 
     public ReplyKeyboardMarkup getReplyButtons(TelegramLang lang, boolean showContact) {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow row = new KeyboardRow();
 
         if (showContact) {
+            KeyboardRow row = new KeyboardRow();
             KeyboardButton contactButton = new KeyboardButton();
             contactButton.setText(TelegramMessage.SHARE_CONTACT.getName(lang));
             contactButton.setRequestContact(true);
             row.add(contactButton);
+            keyboard.add(row);
         } else {
+            KeyboardRow row1 = new KeyboardRow();
             KeyboardButton languageButtons = new KeyboardButton();
             languageButtons.setText(TelegramMessage.CHANGE_LANGUAGE.getName(lang));
-            row.add(languageButtons);
+            row1.add(languageButtons);
 
+
+            KeyboardRow row2 = new KeyboardRow();
             KeyboardButton frequentButtons = new KeyboardButton();
             frequentButtons.setText(TelegramMessage.FREQUENT_INFO.getName(lang));
-            row.add(frequentButtons);
-        }
+            row2.add(frequentButtons);
 
-        keyboard.add(row);
+            KeyboardRow row3 = new KeyboardRow();
+            KeyboardButton productButtons = new KeyboardButton();
+            productButtons.setText(TelegramMessage.PRODUCT_IMAGE_LIST.getName(lang));
+            row3.add(productButtons);
+
+            keyboard.add(row3);
+            keyboard.add(row2);
+            keyboard.add(row1);
+        }
 
         keyboardMarkup.setKeyboard(keyboard);
         keyboardMarkup.setResizeKeyboard(true);
@@ -239,8 +276,27 @@ public class TelegramService {
         return inlineKeyboardMarkup;
     }
 
+    public InlineKeyboardMarkup getProductInlineButtons(TelegramLang lang) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> categoryButtons = new ArrayList<>();
 
-    public void sendPhotoFromMinio(String chatId, String objectName, String caption) {
+        List<Category> categories = categoryRepository.findAllByStatus(Status.ACTIVE);
+        for(Category category: categories){
+            InlineKeyboardButton button = new InlineKeyboardButton(Utils.getLanguage(category.getTitleUz(), category.getTitleRu(), category.getTitleEng(), lang));
+            button.setCallbackData(category.getCategoryId());
+
+            List<InlineKeyboardButton> row = new ArrayList<>();
+            row.add(button);
+            categoryButtons.add(row);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(categoryButtons);
+
+        return inlineKeyboardMarkup;
+    }
+
+
+    public SendPhoto sendPhotoFromMinio(String chatId, String objectName) {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId);
 
@@ -251,12 +307,13 @@ public class TelegramService {
 
             // Set the image and caption
             sendPhoto.setPhoto(inputFile);
-            sendPhoto.setCaption(caption);
 
-//            execute(sendPhoto);
+            return sendPhoto;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        return null;
     }
 
 }

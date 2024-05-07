@@ -12,9 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -47,7 +49,18 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
             if (update.hasCallbackQuery()) {
                 CallbackQuery callbackQuery = update.getCallbackQuery();
                 String callbackData = callbackQuery.getData();
-                execute(telegramService.getCallBackData(callbackData, String.valueOf(update.getCallbackQuery().getFrom().getId())));
+                String chatId = String.valueOf(update.getCallbackQuery().getFrom().getId());
+                List<SendMessage> sendMessages = telegramService.getCallBackData(callbackData, chatId);
+                if (sendMessages.size() == 1) {
+                    execute(sendMessages.get(0));
+                } else {
+                    for (SendMessage sendMess : sendMessages) {
+                        SendPhoto sendPhoto = telegramService.sendPhotoFromMinio(chatId, sendMess.getText());
+                        if (Objects.nonNull(sendPhoto)) {
+                            execute(sendPhoto);
+                        }
+                    }
+                }
             }
 
             if (update.hasMessage() && update.getMessage().hasText()) {
@@ -57,13 +70,13 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                 TelegramLang lang = TelegramLang.UZB;
 
                 Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
-                if(optionalUser.isPresent()){
+                if (optionalUser.isPresent()) {
                     lang = Objects.nonNull(optionalUser.get().getLang()) ? optionalUser.get().getLang() : lang;
-                }
-
-                Optional<TelegramUser> optionalTelegramUser = telegramUserRepository.findByChatId(chatId);
-                if(optionalTelegramUser.isPresent()){
-                    lang = Objects.nonNull(optionalTelegramUser.get().getLang()) ? optionalTelegramUser.get().getLang() : lang;
+                } else {
+                    Optional<TelegramUser> optionalTelegramUser = telegramUserRepository.findByChatId(chatId);
+                    if (optionalTelegramUser.isPresent()) {
+                        lang = Objects.nonNull(optionalTelegramUser.get().getLang()) ? optionalTelegramUser.get().getLang() : lang;
+                    }
                 }
 
                 if (messageText.equals("/start")) {
@@ -76,23 +89,27 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                     sendMessage.setReplyMarkup(telegramService.getLanguageInlineButtons());
                     sendMessage.setChatId(chatId);
                     execute(sendMessage);
-                }else if (messageText.equals(TelegramMessage.FREQUENT_INFO.getName(lang))) {
+                } else if (messageText.equals(TelegramMessage.FREQUENT_INFO.getName(lang))) {
                     sendMessage.setText(TelegramMessage.FREQUENT_INFO.getName(lang));
                     sendMessage.setReplyMarkup(telegramService.getFrequentInlineButtons(lang));
                     sendMessage.setChatId(chatId);
                     execute(sendMessage);
-                }else {
+                } else if (messageText.equals(TelegramMessage.PRODUCT_IMAGE_LIST.getName(lang))) {
+                    sendMessage.setText(TelegramMessage.PRODUCT_IMAGE_LIST.getName(lang));
+                    sendMessage.setReplyMarkup(telegramService.getProductInlineButtons(lang));
+                    sendMessage.setChatId(chatId);
+                    execute(sendMessage);
+                } else {
                     execute(telegramService.defaultResponse(String.valueOf(update.getMessage().getChatId())));
                 }
-
-                //todo: frequesnt info
 
                 //todo: product images also plan images
 
             }
 
             if (update.hasMessage() && update.getMessage().hasContact()) {
-                execute(telegramService.setContactInfo(String.valueOf(update.getMessage().getChatId()), update.getMessage().getContact()));
+                System.out.println(update.getMessage());
+                execute(telegramService.setContactInfo(String.valueOf(update.getMessage().getFrom().getId()), update.getMessage().getContact()));
             }
 
 

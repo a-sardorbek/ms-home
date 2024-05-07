@@ -1,7 +1,5 @@
 package com.system.uz.enums;
 
-import com.system.uz.global.TelegramEmoji;
-
 import java.io.Serializable;
 
 public enum TelegramMessage implements Serializable {
@@ -69,9 +67,23 @@ public enum TelegramMessage implements Serializable {
                 case UZB:
                     return "Ma'lumot olish";
                 case ENG:
-                    return "Получить информацию";
-                default:
                     return "Information";
+                default:
+                    return "Получить информацию";
+            }
+        }
+    },
+
+    PRODUCT_IMAGE_LIST {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Rasmlar to'plami";
+                case ENG:
+                    return "Pictures";
+                default:
+                    return "Коллекция фотографий";
             }
         }
     },
