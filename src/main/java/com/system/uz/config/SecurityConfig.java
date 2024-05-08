@@ -60,7 +60,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             API_V1 + FREQUENT + LIST,
             API_V1 + FREQUENT + BY_ID,
             API_V1 + PRODUCT + LIST,
-            API_V1 + PRODUCT + BY_ID
+            API_V1 + PRODUCT + BY_ID,
+            API_V1 + CATEGORY + LIST,
+            API_V1 + CATEGORY + BY_ID
     };
 
 //    static {

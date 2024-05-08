@@ -13,6 +13,7 @@ import com.system.uz.rest.model.admin.category.CategoryCreateReq;
 import com.system.uz.rest.model.admin.category.CategoryRes;
 import com.system.uz.rest.model.admin.category.CategoryUpdateReq;
 import com.system.uz.rest.model.admin.criteria.PageSize;
+import com.system.uz.rest.model.category.CategoryWhiteRes;
 import com.system.uz.rest.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -79,7 +80,7 @@ public class CategoryService {
         Page<Category> categories;
         if (Objects.nonNull(status)) {
             categories = categoryRepository.findAllByStatus(status, pageable);
-        }else {
+        } else {
             categories = categoryRepository.findAll(pageable);
         }
 
@@ -133,5 +134,38 @@ public class CategoryService {
         category.setStatus(Status.INACTIVE);
         category.setDeletedAt(LocalDateTime.now());
         categoryRepository.save(category);
+    }
+
+
+    public ResponseEntity<List<CategoryWhiteRes>> getWhiteList() {
+        List<Category> categories = categoryRepository.findAllByStatus(Status.ACTIVE);
+
+        List<CategoryWhiteRes> categoryResList = new ArrayList<>();
+        for (Category category : categories) {
+            categoryResList.add(new CategoryWhiteRes(
+                    category.getCategoryId(),
+                    category.getStatus(),
+                    Utils.getLanguage(category.getTitleUz(), category.getTitleRu(), category.getTitleEng()),
+                    Utils.getLanguage(category.getDescriptionUz(), category.getDescriptionRu(), category.getDescriptionEng())
+            ));
+        }
+
+        return ResponseEntity.ok(categoryResList);
+    }
+
+    public ResponseEntity<CategoryWhiteRes> getWhiteById(String categoryId) {
+        Optional<Category> optionalCategory = categoryRepository.findByCategoryId(categoryId);
+        if (optionalCategory.isEmpty()) {
+            throw new NotFoundException(MessageKey.NOT_FOUND);
+        }
+        Category category = optionalCategory.get();
+
+        CategoryWhiteRes categoryRes = new CategoryWhiteRes(
+                category.getCategoryId(),
+                category.getStatus(),
+                Utils.getLanguage(category.getTitleUz(), category.getTitleRu(), category.getTitleEng()),
+                Utils.getLanguage(category.getDescriptionUz(), category.getDescriptionRu(), category.getDescriptionEng()));
+
+        return ResponseEntity.ok(categoryRes);
     }
 }

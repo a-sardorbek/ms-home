@@ -2,6 +2,9 @@ package com.system.uz.rest.controller;
 
 import static com.system.uz.base.BaseUri.*;
 
+import com.system.uz.enums.Status;
+import com.system.uz.global.PagingResponse;
+import com.system.uz.rest.model.admin.category.CategoryRes;
 import com.system.uz.rest.model.product.ProductWhiteRes;
 import com.system.uz.rest.model.product.ProductWhiteShortRes;
 import com.system.uz.rest.service.ProductService;
@@ -27,5 +30,4 @@ public class ProductController {
     public ResponseEntity<List<ProductWhiteShortRes>> getList(@RequestParam(value = "categoryId", required = false) String categoryId) {
         return productService.getShortWhiteList(categoryId);
     }
-
 }
