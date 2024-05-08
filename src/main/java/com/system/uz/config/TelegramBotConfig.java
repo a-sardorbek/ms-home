@@ -1,5 +1,7 @@
 package com.system.uz.config;
 
+import com.system.uz.enums.BucketFolder;
+import com.system.uz.enums.ImageType;
 import com.system.uz.enums.TelegramLang;
 import com.system.uz.enums.TelegramMessage;
 import com.system.uz.env.TelegramBotEnv;
@@ -51,11 +53,11 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                 String callbackData = callbackQuery.getData();
                 String chatId = String.valueOf(update.getCallbackQuery().getFrom().getId());
                 List<SendMessage> sendMessages = telegramService.getCallBackData(callbackData, chatId);
-                if (sendMessages.size() == 1) {
+                if (sendMessages.size() == 1 && !sendMessages.get(0).getText().startsWith(BucketFolder.PRODUCT.name())) {
                     execute(sendMessages.get(0));
                 } else {
                     for (SendMessage sendMess : sendMessages) {
-                        SendPhoto sendPhoto = telegramService.sendPhotoFromMinio(chatId, sendMess.getText());
+                        SendPhoto sendPhoto = telegramService.getFileFromMinio(chatId, sendMess.getText());
                         if (Objects.nonNull(sendPhoto)) {
                             execute(sendPhoto);
                         }
@@ -102,8 +104,6 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                 } else {
                     execute(telegramService.defaultResponse(String.valueOf(update.getMessage().getChatId())));
                 }
-
-                //todo: product images also plan images
 
             }
 

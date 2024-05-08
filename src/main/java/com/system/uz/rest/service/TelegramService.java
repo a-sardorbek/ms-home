@@ -296,7 +296,7 @@ public class TelegramService {
     }
 
 
-    public SendPhoto sendPhotoFromMinio(String chatId, String objectName) {
+    public SendPhoto getFileFromMinio(String chatId, String objectName) {
         SendPhoto sendPhoto = new SendPhoto();
         sendPhoto.setChatId(chatId);
 
