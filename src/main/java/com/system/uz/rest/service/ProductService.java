@@ -140,12 +140,12 @@ public class ProductService {
             products = productRepository.findAll(pageable);
         }
 
-        List<ProductImage> imageProducts = new ArrayList<>();
-        List<PlanImage> imagePlans = new ArrayList<>();
-
         List<ProductRes> productResList = products.getContent().stream()
                 .map(product -> {
                     CategoryRes categoryRes = getCategoryRes(product);
+
+                    List<ProductImage> imageProducts = new ArrayList<>();
+                    List<PlanImage> imagePlans = new ArrayList<>();
 
                     imageRepository.findAllByProductId(product.getProductId()).forEach(image -> {
                         switch (image.getType()) {
