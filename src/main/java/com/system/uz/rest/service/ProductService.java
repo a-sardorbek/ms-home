@@ -73,6 +73,11 @@ public class ProductService {
             throw new NotFoundException(MessageKey.NOT_FOUND);
         }
 
+        Optional<Category> optionalCategory = categoryRepository.findByCategoryId(req.getCategoryId());
+        if (optionalCategory.isEmpty()) {
+            throw new NotFoundException(MessageKey.NOT_FOUND);
+        }
+
         Product product = optionalProduct.get();
         product.setSize(req.getSize());
         product.setTitleUz(req.getTitleUz());
@@ -81,6 +86,7 @@ public class ProductService {
         product.setPlanUz(req.getPlanUz());
         product.setPlanRu(req.getPlanRu());
         product.setPlanEng(req.getPlanEng());
+        product.setCategoryId(req.getCategoryId());
 
         productRepository.save(product);
     }

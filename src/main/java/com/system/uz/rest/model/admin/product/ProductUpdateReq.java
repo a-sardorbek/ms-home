@@ -15,6 +15,9 @@ public class ProductUpdateReq {
     @NotBlank(message = "productId is mandatory")
     private String productId;
 
+    @NotBlank(message = "categoryId is mandatory")
+    private String categoryId;
+
     @NotBlank(message = "title_uz is mandatory")
     private String titleUz;
 
