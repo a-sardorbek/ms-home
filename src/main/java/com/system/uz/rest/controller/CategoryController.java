@@ -1,5 +1,6 @@
 package com.system.uz.rest.controller;
 
+import com.system.uz.enums.Lang;
 import com.system.uz.enums.Status;
 import com.system.uz.global.PagingResponse;
 import com.system.uz.rest.model.admin.category.CategoryActivationReq;
@@ -29,12 +30,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+    })
     @GetMapping(BY_ID)
     public ResponseEntity<CategoryWhiteRes> getById(@RequestParam("categoryId") String categoryID) {
         return categoryService.getWhiteById(categoryID);
     }
 
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+    })
     @GetMapping(LIST)
     public ResponseEntity<List<CategoryWhiteRes>> getList() {
         return categoryService.getWhiteList();
