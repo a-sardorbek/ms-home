@@ -26,19 +26,9 @@ public class AdminUserController {
             @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
     })
     @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
-    @GetMapping
+    @GetMapping(ME)
     public ResponseEntity<UserInfoRes> getUserInfo() {
         return userService.getUserInfo();
-    }
-
-
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
-    })
-    @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
-    @GetMapping(BY_ID)
-    public ResponseEntity<UserInfoRes> getUserInfoById(@RequestParam("userId") String userId) {
-        return userService.getUserInfoById(userId);
     }
 
 
@@ -76,37 +66,47 @@ public class AdminUserController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
-    })
-    @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
-    @PostMapping(CHANGE_PASSWORD + SEND_OTP)
-    public ResponseEntity<?> changePasswordSendTelegram(@RequestParam(value = "userId", required = false) String userId) {
-        userService.changePasswordSendOtp(userId);
-        return ResponseEntity.noContent().build();
-    }
-
-
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
-    })
-    @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
-    @PutMapping(CHANGE_PASSWORD)
-    public ResponseEntity<?> changePassword(@Valid @RequestBody UserChangePasswordReq req) {
-        userService.changePassword(req);
-        return ResponseEntity.noContent().build();
-    }
-
-
     @ApiImplicitParams({
             @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
     })
     @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
     @PostMapping(TELEGRAM + ACTIVATION)
-    public ResponseEntity<UserActivateTelegramRes> activateTelegram(@Valid @RequestBody UserIdRequest req) {
-         userService.activateTelegram(req);
-         return ResponseEntity.noContent().build();
+    public ResponseEntity<UserActivateTelegramRes> activateTelegram() {
+        userService.activateTelegram();
+        return ResponseEntity.noContent().build();
     }
+
+
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
+//    })
+//    @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
+//    @PostMapping(CHANGE_PASSWORD + SEND_OTP)
+//    public ResponseEntity<?> changePasswordSendTelegram(@RequestParam(value = "userId", required = false) String userId) {
+//        userService.changePasswordSendOtp(userId);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
+//    })
+//    @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
+//    @PutMapping(CHANGE_PASSWORD)
+//    public ResponseEntity<?> changePassword(@Valid @RequestBody UserChangePasswordReq req) {
+//        userService.changePassword(req);
+//        return ResponseEntity.noContent().build();
+//    }
+
+
+//    @ApiImplicitParams({
+//            @ApiImplicitParam(name = "Authorization", value = "Token", required = true, paramType = "header", dataTypeClass = String.class),
+//    })
+//    @PreAuthorize("hasAuthority(T(com.system.uz.enums.Permission).SYS_ADMIN_MODERN_HOUSE)")
+//    @GetMapping(BY_ID)
+//    public ResponseEntity<UserInfoRes> getUserInfoById(@RequestParam("userId") String userId) {
+//        return userService.getUserInfoById(userId);
+//    }
+
 
 }

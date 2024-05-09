@@ -118,5 +118,4 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
         }
 
     }
-
 }

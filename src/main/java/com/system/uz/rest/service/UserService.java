@@ -1,7 +1,9 @@
 package com.system.uz.rest.service;
 
+import com.system.uz.config.TelegramBotConfig;
 import com.system.uz.enums.BotState;
 import com.system.uz.enums.Permission;
+import com.system.uz.enums.TelegramMessage;
 import com.system.uz.enums.TelegramMessageType;
 import com.system.uz.exceptions.BadRequestException;
 import com.system.uz.exceptions.NotFoundException;
@@ -14,7 +16,7 @@ import com.system.uz.rest.domain.admin.User;
 import com.system.uz.rest.model.admin.criteria.PageSize;
 import com.system.uz.rest.model.admin.user.*;
 import com.system.uz.rest.model.auth.SignInReq;
-import com.system.uz.rest.model.auth.SignUpReq;
+import com.system.uz.rest.model.auth.ResetPasswordReq;
 import com.system.uz.rest.model.auth.SignUpRes;
 import com.system.uz.rest.model.telegram.TelegramSendMessage;
 import com.system.uz.rest.repository.UserRepository;
@@ -25,7 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,24 +45,31 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final TelegramMessageService telegramMessageService;
 
-    public ResponseEntity<SignUpRes> signUp(SignUpReq data) {
-        Optional<User> optionalUser = userRepository.findByUsername(data.getUsername());
-        if (optionalUser.isPresent()) {
-            throw new BadRequestException(MessageKey.USERNAME_ALREADY_EXISTS);
+    public void resetPass(ResetPasswordReq data) {
+        Optional<User> optionalUser = userRepository.findByUsername(data.getPhone());
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestException(MessageKey.NOT_FOUND);
+        }
+        User user = optionalUser.get();
+
+        if(user.getBotState().equals(BotState.INACTIVE) || !Utils.isValidString(user.getTelegramChatId())){
+            throw new BadRequestException(MessageKey.USER_TELEGRAM_BOT_INACTIVE);
         }
 
-        User user = new User();
-        user.setUserId(Utils.generateToken());
-        user.setUsername(data.getUsername());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setFio(data.getFio());
-        user.setPhone(data.getPhone());
-        user.setIsLoggedIn(true);
-        User newUser = userRepository.save(user);
+        user.setConfirmPassword(passwordEncoder.encode(data.getPassword()));
+        userRepository.save(user);
 
-        String token = jwtTokenProvider.generateJwtToken(newUser.getUserId());
+        String message = String.format(
+                TelegramMessageType.CHANGE_PASSWORD_CONFIRM.getMessage(),
+                user.getFio(),
+                "Подтвердите сброс пароля",
+                "Новый пароль: " + data.getPassword());
 
-        return ResponseEntity.ok(new SignUpRes(token));
+        TelegramSendMessage sendMessage = new TelegramSendMessage();
+        sendMessage.setChatId(user.getTelegramChatId());
+        sendMessage.setMessage(message);
+
+        telegramMessageService.sendMessageCallBack(sendMessage);
     }
 
     public ResponseEntity<SignUpRes> signIn(SignInReq data) {
@@ -183,11 +191,6 @@ public class UserService {
         }
 
         User user = new User();
-
-        if (req.getPhone().equals(user.getPhone())) {
-            throw new BadRequestException(MessageKey.PHONE_ALREADY_EXISTS);
-        }
-
         user.setUserId(Utils.generateToken());
         user.setUsername(req.getUsername());
         user.setPassword(passwordEncoder.encode(req.getPassword()));
@@ -197,8 +200,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void activateTelegram(UserIdRequest req) {
-        Optional<User> optionalUser = userRepository.findByUserId(req.getUserId());
+    public void activateTelegram() {
+        Optional<User> optionalUser = userRepository.findByUserId(GlobalVar.getUserId());
         if (optionalUser.isEmpty()) {
             throw new NotFoundException(MessageKey.NOT_FOUND);
         }
@@ -210,7 +213,7 @@ public class UserService {
     }
 
     public void updateUser(UserUpdateReq req) {
-        Optional<User> optionalUser = userRepository.findByUserId(req.getUserId());
+        Optional<User> optionalUser = userRepository.findByUserId(GlobalVar.getUserId());
         if (optionalUser.isEmpty()) {
             throw new NotFoundException(MessageKey.NOT_FOUND);
         }
@@ -219,8 +222,6 @@ public class UserService {
 
         if (Utils.isValidString(req.getPhone())) {
             String phone = Utils.checkPhone(req.getPhone());
-
-
             Optional<User> optionalUserByPhone = userRepository.findByPhone(phone);
             if (optionalUserByPhone.isPresent()) {
                 if (!Objects.equals(user.getId(), optionalUserByPhone.get().getId())) {
@@ -240,6 +241,8 @@ public class UserService {
             user.setFio(req.getFio());
         }
 
+        userRepository.save(user);
+
     }
 
 
@@ -255,15 +258,15 @@ public class UserService {
             user.setTelegramConfirmCode(passwordEncoder.encode(code));
             userRepository.save(user);
 
-            String message = String.format(
-                    TelegramMessageType.CHANGE_PASSWORD_OTP.getMessage(),
-                    user.getFio(),
-                    "Код для замена пароля",
-                    code);
+//            String message = String.format(
+//                    TelegramMessageType.CHANGE_PASSWORD_OTP.getMessage(),
+//                    user.getFio(),
+//                    "Код для замена пароля",
+//                    code);
 
             TelegramSendMessage sendMessage = new TelegramSendMessage();
             sendMessage.setChatId(user.getTelegramChatId());
-            sendMessage.setMessage(message);
+            sendMessage.setMessage("message");
             telegramMessageService.sendMessage(sendMessage);
 
         } else {

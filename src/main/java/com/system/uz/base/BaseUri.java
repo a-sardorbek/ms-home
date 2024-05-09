@@ -4,6 +4,7 @@ public interface BaseUri {
     String API_V1 = "/api/v1";
     String ADMIN = "/admin";
     String USER = "/user";
+    String ME = "/me";
     String CATEGORY = "/category";
     String PRODUCT = "/product";
     String CLIENT = "/client";
@@ -18,7 +19,7 @@ public interface BaseUri {
     String LIST = "/list";
     String BY_ID = "/by-id";
     String LOGIN = "/login";
-    String REGISTER = "/register";
+    String RESET_PASSWORD = "/reset-password";
     String FILE = "/file";
     String LOGOUT = "/logout";
     String CHANGE_PASSWORD = "/change-password";

@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] PERMIT_URLS = {
             API_V1 + LOGIN,
             API_V1 + LOGOUT,
+            API_V1 + RESET_PASSWORD,
             API_V1 + FILE,
             API_V1 + FILE + PHOTO,
             API_V1 + BLOG + LIST,

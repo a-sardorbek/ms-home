@@ -7,10 +7,18 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TelegramMessageType {
-    CHANGE_PASSWORD_OTP(
+    CHANGE_PASSWORD_CONFIRM(
             TelegramEmoji.USER + "\t %s\n" +
-            TelegramEmoji.TEXT + "\t %s\n\n" +
-            TelegramEmoji.NEXT + "\t %s\n"
+            "\t %s\n\n" +
+            "\t %s\n"
+    ),
+
+    CHANGE_PASSWORD_SUCCESS(
+            TelegramEmoji.ADD + "\t %s\n"
+    ),
+
+    CHANGE_PASSWORD_ERROR(
+            TelegramEmoji.ADD + "\t %s\n"
     ),
 
     FREQUENT_INFO(

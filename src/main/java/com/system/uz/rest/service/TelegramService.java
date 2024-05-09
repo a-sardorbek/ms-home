@@ -2,6 +2,7 @@ package com.system.uz.rest.service;
 
 import com.system.uz.enums.*;
 import com.system.uz.env.MinioServiceEnv;
+import com.system.uz.global.TelegramEmoji;
 import com.system.uz.global.Utils;
 import com.system.uz.rest.domain.Category;
 import com.system.uz.rest.domain.FrequentInfo;
@@ -107,6 +108,8 @@ public class TelegramService {
             case "UZB":
                 lang = TelegramLang.UZB;
                 break;
+            case "CONFIRM_PASSWORD":
+                return confirmPassword(chatId);
             case "QUESTION":
                 return frequentInfo(chatId, InfoType.QUESTION);
             case "MATERIAL":
@@ -140,18 +143,35 @@ public class TelegramService {
         return List.of(sendMessage);
     }
 
+    private List<SendMessage> confirmPassword(String chatId) {
+        Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
+        SendMessage sendMessage = new SendMessage();
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setPassword(user.getConfirmPassword());
+            userRepository.save(user);
+            sendMessage.setText(String.format(TelegramMessageType.CHANGE_PASSWORD_SUCCESS.getMessage(), "Успешно подтверждено"));
+            sendMessage.setChatId(chatId);
+        } else {
+            sendMessage.setText(String.format(TelegramMessageType.CHANGE_PASSWORD_ERROR.getMessage(), "Пользователь не найден"));
+            sendMessage.setChatId(chatId);
+        }
+
+        return List.of(sendMessage);
+    }
+
     private List<SendMessage> productList(String chatId, String data) {
         List<Product> products = productRepository.findTop30ByCategoryIdOrderByIdDesc(data);
         List<String> productIds = new ArrayList<>();
         List<SendMessage> sendMessages = new ArrayList<>();
 
-        for(Product product: products){
+        for (Product product : products) {
             productIds.add(product.getProductId());
         }
 
         List<Image> images = imageRepository.findAllByProductIdIn(productIds);
 
-        for (Image image: images){
+        for (Image image : images) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
             sendMessage.setText(image.getFullPath());
@@ -182,12 +202,12 @@ public class TelegramService {
         List<FrequentInfo> frequentInfos = frequentInfoRepository.findTop10ByTypeOrderByIdDesc(type);
         List<String> texts = new ArrayList<>();
         int index = 0;
-        for(int i = 0; i < frequentInfos.size(); i++){
+        for (int i = 0; i < frequentInfos.size(); i++) {
             index = i + 1;
-                String text = String.format(
-                        TelegramMessageType.FREQUENT_INFO.getMessage(),
-                        index + ") "+Utils.getLanguage(frequentInfos.get(i).getQuestionUz(), frequentInfos.get(i).getQuestionRu(), frequentInfos.get(i).getQuestionEng(), lang),
-                        Utils.getLanguage(frequentInfos.get(i).getAnswerUz(), frequentInfos.get(i).getAnswerRu(), frequentInfos.get(i).getAnswerEng(), lang));
+            String text = String.format(
+                    TelegramMessageType.FREQUENT_INFO.getMessage(),
+                    index + ") " + Utils.getLanguage(frequentInfos.get(i).getQuestionUz(), frequentInfos.get(i).getQuestionRu(), frequentInfos.get(i).getQuestionEng(), lang),
+                    Utils.getLanguage(frequentInfos.get(i).getAnswerUz(), frequentInfos.get(i).getAnswerRu(), frequentInfos.get(i).getAnswerEng(), lang));
             texts.add(text);
         }
 
@@ -281,7 +301,7 @@ public class TelegramService {
         List<List<InlineKeyboardButton>> categoryButtons = new ArrayList<>();
 
         List<Category> categories = categoryRepository.findAllByStatus(Status.ACTIVE);
-        for(Category category: categories){
+        for (Category category : categories) {
             InlineKeyboardButton button = new InlineKeyboardButton(Utils.getLanguage(category.getTitleUz(), category.getTitleRu(), category.getTitleEng(), lang));
             button.setCallbackData(category.getCategoryId());
 
@@ -291,6 +311,19 @@ public class TelegramService {
         }
 
         inlineKeyboardMarkup.setKeyboard(categoryButtons);
+
+        return inlineKeyboardMarkup;
+    }
+
+
+    public InlineKeyboardMarkup getConfirmChangePasswordInlineButtons() {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+
+        InlineKeyboardButton confirm = new InlineKeyboardButton();
+        confirm.setText(" " + TelegramEmoji.ADD);
+        confirm.setCallbackData("CONFIRM_PASSWORD");
+
+        inlineKeyboardMarkup.setKeyboard(List.of(List.of(confirm)));
 
         return inlineKeyboardMarkup;
     }

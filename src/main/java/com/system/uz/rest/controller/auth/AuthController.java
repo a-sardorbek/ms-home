@@ -1,6 +1,7 @@
 package com.system.uz.rest.controller.auth;
 
 import com.system.uz.rest.model.auth.SignInReq;
+import com.system.uz.rest.model.auth.ResetPasswordReq;
 import com.system.uz.rest.model.auth.SignUpRes;
 import com.system.uz.rest.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -23,11 +24,6 @@ public class AuthController {
 
     private final UserService userService;
 
-//    @PostMapping(REGISTER)
-//    public ResponseEntity<SignUpRes> signUp(@Valid @RequestBody SignUpReq data){
-//        return userService.signUp(data);
-//    }
-
     @PostMapping(LOGIN)
     public ResponseEntity<SignUpRes> signIn(@Valid @RequestBody SignInReq data){
         return userService.signIn(data);
@@ -39,6 +35,12 @@ public class AuthController {
     @PostMapping(LOGOUT)
     public ResponseEntity<?> signOut(){
         userService.signOut();
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(RESET_PASSWORD)
+    public ResponseEntity<?> resetPass(@Valid @RequestBody ResetPasswordReq data){
+        userService.resetPass(data);
         return ResponseEntity.noContent().build();
     }
 

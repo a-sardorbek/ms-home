@@ -30,6 +30,9 @@ public class User extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "confirm_password")
+    private String confirmPassword;
+
     @Column(name = "fio", nullable = false)
     private String fio;
 
