@@ -9,6 +9,7 @@ public interface MessageKey {
     String NOT_FOUND = "not.found";
     String INCORRECT_CODE = "incorrect.code";
     String USER_TELEGRAM_BOT_INACTIVE = "user.telegram.bot";
+    String USER_TELEGRAM_BOT_NOT_REGISTERED = "user.telegram.bot.not.registered";
     String TITLE_MANDATORY_FOR_PLAN_TYPE = "title.is.required.for.plan.type";
 
 

@@ -29,6 +29,13 @@ public enum TelegramMessageType {
     USER_LANGUAGE_SAVED(
             TelegramEmoji.LANGUAGE + "\t%s\n" +
             TelegramEmoji.ADD + "\t%s\n"
+    ),
+
+    CLIENT_REQUEST_PHONE(
+            TelegramEmoji.NEW + "\t %s\n\n" +
+            TelegramEmoji.USER + "\t %s\n" +
+            TelegramEmoji.PHONE + "\t %s\n" +
+            TelegramEmoji.TEXT + "\t %s\n"
     );
 
     private final String message;

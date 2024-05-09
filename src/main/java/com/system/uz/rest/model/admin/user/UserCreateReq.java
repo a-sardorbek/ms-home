@@ -15,6 +15,7 @@ public class UserCreateReq {
     private String username;
 
     @NotBlank(message = "password is mandatory")
+    @Size(min = 5, max = 20, message = "Password minimum or maximum length incorrect")
     private String password;
 
     @NotBlank(message = "fio is mandatory")

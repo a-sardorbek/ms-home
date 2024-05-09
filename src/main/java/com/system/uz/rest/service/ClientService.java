@@ -1,17 +1,23 @@
 package com.system.uz.rest.service;
 
+import com.system.uz.enums.BotState;
 import com.system.uz.enums.ClientState;
+import com.system.uz.enums.TelegramMessageType;
 import com.system.uz.exceptions.NotFoundException;
 import com.system.uz.global.MessageKey;
 import com.system.uz.global.PagingResponse;
 import com.system.uz.global.Utils;
 import com.system.uz.rest.domain.Client;
+import com.system.uz.rest.domain.admin.User;
 import com.system.uz.rest.model.admin.category.CategoryRes;
 import com.system.uz.rest.model.admin.client.ClientRes;
 import com.system.uz.rest.model.admin.client.ClientUpdateReq;
 import com.system.uz.rest.model.admin.criteria.PageSize;
 import com.system.uz.rest.model.client.ClientCreateReq;
+import com.system.uz.rest.model.telegram.TelegramSendMessage;
 import com.system.uz.rest.repository.ClientRepository;
+import com.system.uz.rest.repository.UserRepository;
+import com.system.uz.rest.service.component.TelegramMessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +35,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ClientService {
     private final ClientRepository clientRepository;
+    private final UserRepository userRepository;
+    private final TelegramMessageService telegramMessageService;
 
     public void create(ClientCreateReq req) {
         Client client = new Client();
@@ -43,7 +51,27 @@ public class ClientService {
 
         clientRepository.save(client);
 
-        //todo: send client info to admins using telegram bot
+        String message = String.format(
+                TelegramMessageType.CLIENT_REQUEST_PHONE.getMessage(),
+                "Заявка",
+                client.getFio(),
+                req.getPhone(),
+                Objects.isNull(req.getDescription()) ? " " : req.getDescription());
+
+        List<User> users = userRepository.findAll();
+        if (!users.isEmpty()) {
+            List<TelegramSendMessage> sendMessages = new ArrayList<>();
+            for (User user : users) {
+                if (Utils.isValidString(user.getTelegramChatId()) && user.getBotState().equals(BotState.ACTIVE)) {
+                    TelegramSendMessage sendMessage = new TelegramSendMessage();
+                    sendMessage.setChatId(user.getTelegramChatId());
+                    sendMessage.setMessage(message);
+                    sendMessages.add(sendMessage);
+                }
+            }
+            telegramMessageService.sendListMessage(sendMessages);
+        }
+
     }
 
     public void confirm(ClientUpdateReq req) {
@@ -66,12 +94,12 @@ public class ClientService {
 
         Client client = optionalClient.get();
         ClientRes clientRes = new ClientRes(
-                    client.getClientId(),
-                    client.getFio(),
-                    client.getPhone(),
-                    client.getDescription(),
-                    client.getState()
-            );
+                client.getClientId(),
+                client.getFio(),
+                client.getPhone(),
+                client.getDescription(),
+                client.getState()
+        );
 
         return ResponseEntity.ok(clientRes);
     }
@@ -81,14 +109,14 @@ public class ClientService {
         Pageable pageable = PageRequest.of(pageSize.getPage(), pageSize.getSize(), Sort.by("id").descending());
 
         Page<Client> clients;
-        if(Objects.nonNull(state)){
+        if (Objects.nonNull(state)) {
             clients = clientRepository.findAllByState(state, pageable);
-        }else {
+        } else {
             clients = clientRepository.findAll(pageable);
         }
 
         List<ClientRes> clientResList = new ArrayList<>();
-        for(Client client: clients.getContent()){
+        for (Client client : clients.getContent()) {
             clientResList.add(new ClientRes(
                     client.getClientId(),
                     client.getFio(),

@@ -206,8 +206,12 @@ public class UserService {
         if (optionalUser.isEmpty()) {
             throw new NotFoundException(MessageKey.NOT_FOUND);
         }
-
         User user = optionalUser.get();
+
+        if(Objects.isNull(user.getTelegramChatId())){
+            throw new BadRequestException(MessageKey.USER_TELEGRAM_BOT_NOT_REGISTERED);
+        }
+
         user.setBotState(BotState.ACTIVE);
         userRepository.save(user);
     }

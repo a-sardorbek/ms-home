@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +15,6 @@ public class ResetPasswordReq {
     private String phone;
 
     @NotBlank(message = "New Password is mandatory")
+    @Size(min = 5, max = 20, message = "Password minimum or maximum length incorrect")
     private String password;
 }
