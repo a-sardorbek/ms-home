@@ -133,6 +133,7 @@ public class UserService {
         userInfo.setUsername(user.getUsername());
         userInfo.setFio(user.getFio());
         userInfo.setPhone(user.getPhone());
+        userInfo.setTelegramState(user.getBotState());
 
         return ResponseEntity.ok(userInfo);
     }
