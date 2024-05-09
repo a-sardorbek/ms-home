@@ -46,7 +46,7 @@ public class UserService {
     private final TelegramMessageService telegramMessageService;
 
     public void resetPass(ResetPasswordReq data) {
-        Optional<User> optionalUser = userRepository.findByUsername(data.getPhone());
+        Optional<User> optionalUser = userRepository.findByPhone(data.getPhone());
         if (optionalUser.isEmpty()) {
             throw new BadRequestException(MessageKey.NOT_FOUND);
         }
