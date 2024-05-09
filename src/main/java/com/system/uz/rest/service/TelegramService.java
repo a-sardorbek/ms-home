@@ -73,7 +73,8 @@ public class TelegramService {
 
     public SendMessage setContactInfo(String chatId, Contact contact) {
         SendMessage sendMessage = new SendMessage();
-        Optional<User> optionalUser = userRepository.findByPhone(contact.getPhoneNumber());
+        String phone = "+"+contact.getPhoneNumber();
+        Optional<User> optionalUser = userRepository.findByPhone(phone);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             user.setBotState(BotState.ACTIVE);
@@ -83,7 +84,7 @@ public class TelegramService {
             Optional<TelegramUser> optionalTelegramUser = telegramUserRepository.findByChatId(chatId);
             TelegramUser telegramUser;
             telegramUser = optionalTelegramUser.orElseGet(TelegramUser::new);
-            telegramUser.setPhone(contact.getPhoneNumber());
+            telegramUser.setPhone(phone);
             telegramUser.setFirstName(contact.getFirstName());
             telegramUser.setChatId(chatId);
             telegramUserRepository.save(telegramUser);

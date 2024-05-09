@@ -210,7 +210,6 @@ public class UserService {
         User user = optionalUser.get();
         user.setBotState(BotState.ACTIVE);
         userRepository.save(user);
-
     }
 
     public void updateUser(UserUpdateReq req) {

@@ -8,7 +8,7 @@ public interface MessageKey {
     String USERNAME_ALREADY_EXISTS = "username.already.exist";
     String NOT_FOUND = "not.found";
     String INCORRECT_CODE = "incorrect.code";
-    String USER_TELEGRAM_BOT_INACTIVE = "user.telegram.bot.inactive";
+    String USER_TELEGRAM_BOT_INACTIVE = "user.telegram.bot";
     String TITLE_MANDATORY_FOR_PLAN_TYPE = "title.is.required.for.plan.type";
 
 
