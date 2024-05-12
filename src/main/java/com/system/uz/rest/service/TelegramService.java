@@ -73,7 +73,7 @@ public class TelegramService {
 
     public SendMessage setContactInfo(String chatId, Contact contact) {
         SendMessage sendMessage = new SendMessage();
-        String phone = "+"+contact.getPhoneNumber();
+        String phone = "+" + contact.getPhoneNumber();
         Optional<User> optionalUser = userRepository.findByPhone(phone);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -172,10 +172,23 @@ public class TelegramService {
 
         List<Image> images = imageRepository.findAllByProductIdIn(productIds);
 
+        TelegramLang lang = TelegramLang.RUS;
+        Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
+        if (optionalUser.isPresent()) {
+            lang = optionalUser.get().getLang();
+        } else {
+            Optional<TelegramUser> optionalTelegramUser = telegramUserRepository.findByChatId(chatId);
+            if (optionalTelegramUser.isPresent()) {
+                lang = optionalTelegramUser.get().getLang();
+            }
+        }
+
+
         for (Image image : images) {
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(chatId);
             sendMessage.setText(image.getFullPath());
+            sendMessage.setReplyMarkup(getReplyButtons(lang, false));
             sendMessages.add(sendMessage);
         }
 
@@ -214,6 +227,7 @@ public class TelegramService {
 
         sendMessage.setText(texts.isEmpty() ? TelegramMessage.DEFAULT_MESSAGE.getName(lang) : Utils.convertToString(texts));
         sendMessage.setChatId(chatId);
+        sendMessage.setReplyMarkup(getReplyButtons(lang, false));
         return List.of(sendMessage);
     }
 
