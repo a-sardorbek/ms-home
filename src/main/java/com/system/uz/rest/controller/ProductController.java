@@ -26,7 +26,7 @@ public class ProductController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(BY_ID)
     public ResponseEntity<ProductWhiteRes> getById(@RequestParam(value = "productId") String productId) {
@@ -35,7 +35,7 @@ public class ProductController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(LIST)
     public ResponseEntity<List<ProductWhiteShortRes>> getList(@RequestParam(value = "categoryId", required = false) String categoryId) {

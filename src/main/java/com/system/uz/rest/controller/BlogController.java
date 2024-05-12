@@ -25,7 +25,7 @@ public class BlogController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(BY_ID)
     public ResponseEntity<BlogWhiteShortRes> getById(@RequestParam(value = "blogId") String blogId) {
@@ -34,7 +34,7 @@ public class BlogController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(LIST)
     public ResponseEntity<List<BlogWhiteShortRes>> getList() {

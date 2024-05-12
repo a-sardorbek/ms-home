@@ -25,7 +25,7 @@ public class FrequentController {
     private final FrequentInfoService frequentInfoService;
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(BY_ID)
     public ResponseEntity<FrequentShortWhiteRes> getById(@RequestParam(value = "frequentId") String frequentId) {
@@ -34,7 +34,7 @@ public class FrequentController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(LIST)
     public ResponseEntity<List<FrequentShortWhiteRes>> getList(@RequestParam(value = "type") InfoType type) {

@@ -31,7 +31,7 @@ public class CategoryController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(BY_ID)
     public ResponseEntity<CategoryWhiteRes> getById(@RequestParam("categoryId") String categoryID) {
@@ -40,7 +40,7 @@ public class CategoryController {
 
 
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "Language", value = "Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
+            @ApiImplicitParam(name = "Accept-Language", value = "Accept-Language", dataTypeClass = Lang.class, paramType = "header", defaultValue = "UZB")
     })
     @GetMapping(LIST)
     public ResponseEntity<List<CategoryWhiteRes>> getList() {
