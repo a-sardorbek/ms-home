@@ -40,7 +40,7 @@ public class BeforeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String URI = request.getRequestURI();
-        String lang = request.getHeader("Language");
+        String lang = request.getHeader("Accept-Language");
         GlobalVar.setLANG(Utils.isValidString(lang) ? Lang.valueOf(lang): Lang.RUS);
 
 
