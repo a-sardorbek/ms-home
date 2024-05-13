@@ -40,9 +40,6 @@ public class BeforeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String URI = request.getRequestURI();
-        String acceptLang = request.getHeader("Accept-Language");
-        Lang lang = this.parseAcceptLanguage(acceptLang);
-        GlobalVar.setLANG(lang);
 
         if(isOpenUri(URI)){
             String authorizationRequestHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -64,6 +61,9 @@ public class BeforeFilter extends OncePerRequestFilter {
         }
 
         if (isAdminUri(URI)) {
+            String acceptLang = request.getHeader("Accept-Language");
+            Lang lang = this.parseAcceptLanguage(acceptLang);
+            GlobalVar.setLANG(lang);
             try {
                 String authorizationRequestHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
                 if (authorizationRequestHeader == null || !authorizationRequestHeader.startsWith(JwtConstant.TOKEN_PREFIX)) {
