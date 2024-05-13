@@ -40,9 +40,9 @@ public class BeforeFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String URI = request.getRequestURI();
-        String lang = request.getHeader("Accept-Language");
-        GlobalVar.setLANG(Utils.isValidString(lang) ? Lang.valueOf(lang): Lang.RUS);
-
+        String acceptLang = request.getHeader("Accept-Language");
+        Lang lang = this.parseAcceptLanguage(acceptLang);
+        GlobalVar.setLANG(lang);
 
         if(isOpenUri(URI)){
             String authorizationRequestHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -100,6 +100,16 @@ public class BeforeFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
 
+    }
+
+    private Lang parseAcceptLanguage(String acceptLanguage) {
+        if (acceptLanguage.contains("ru")) {
+            return Lang.RUS;
+        } else if (acceptLanguage.contains("en")) {
+            return Lang.ENG;
+        }else {
+            return Lang.UZB;
+        }
     }
 
     private boolean isAdminUri(String url) {

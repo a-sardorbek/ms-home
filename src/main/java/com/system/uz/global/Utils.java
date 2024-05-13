@@ -1,7 +1,6 @@
 package com.system.uz.global;
 
 
-import com.system.uz.enums.Lang;
 import com.system.uz.enums.TelegramLang;
 import com.system.uz.exceptions.BadRequestException;
 import com.system.uz.rest.model.admin.criteria.PageSize;
