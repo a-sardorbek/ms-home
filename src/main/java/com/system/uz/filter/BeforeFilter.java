@@ -42,6 +42,9 @@ public class BeforeFilter extends OncePerRequestFilter {
         String URI = request.getRequestURI();
 
         if(isOpenUri(URI)){
+            String acceptLang = request.getHeader("Accept-Language");
+            Lang lang = this.parseAcceptLanguage(acceptLang);
+            GlobalVar.setLANG(lang);
             String authorizationRequestHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authorizationRequestHeader == null || !authorizationRequestHeader.startsWith(JwtConstant.TOKEN_PREFIX)) {
                 filterChain.doFilter(request, response);
@@ -50,6 +53,9 @@ public class BeforeFilter extends OncePerRequestFilter {
         }
 
         if(URI.contains(LOGOUT)){
+            String acceptLang = request.getHeader("Accept-Language");
+            Lang lang = this.parseAcceptLanguage(acceptLang);
+            GlobalVar.setLANG(lang);
             String authorizationRequestHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authorizationRequestHeader == null || !authorizationRequestHeader.startsWith(JwtConstant.TOKEN_PREFIX)) {
                 filterChain.doFilter(request, response);
@@ -61,9 +67,6 @@ public class BeforeFilter extends OncePerRequestFilter {
         }
 
         if (isAdminUri(URI)) {
-            String acceptLang = request.getHeader("Accept-Language");
-            Lang lang = this.parseAcceptLanguage(acceptLang);
-            GlobalVar.setLANG(lang);
             try {
                 String authorizationRequestHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
                 if (authorizationRequestHeader == null || !authorizationRequestHeader.startsWith(JwtConstant.TOKEN_PREFIX)) {
