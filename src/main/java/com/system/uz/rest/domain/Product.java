@@ -30,7 +30,7 @@ public class Product extends BaseEntity {
     @Column(name = "title_eng", columnDefinition = "TEXT")
     private String titleEng;
 
-    @Column(name = "size", columnDefinition = "TEXT")
+    @Column(name = "size")
     private Integer size;
 
     @Column(name = "plan_uz", columnDefinition = "TEXT")
