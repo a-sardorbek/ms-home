@@ -21,25 +21,25 @@ public class Product extends BaseEntity {
     @Column(name = "product_id", nullable = false, unique = true)
     private String productId;
 
-    @Column(name = "title_uz")
+    @Column(name = "title_uz", columnDefinition = "TEXT")
     private String titleUz;
 
-    @Column(name = "title_ru")
+    @Column(name = "title_ru", columnDefinition = "TEXT")
     private String titleRu;
 
-    @Column(name = "title_eng")
+    @Column(name = "title_eng", columnDefinition = "TEXT")
     private String titleEng;
 
-    @Column(name = "size")
+    @Column(name = "size", columnDefinition = "TEXT")
     private Integer size;
 
-    @Column(name = "plan_uz")
+    @Column(name = "plan_uz", columnDefinition = "TEXT")
     private String planUz;
 
-    @Column(name = "plan_ru")
+    @Column(name = "plan_ru", columnDefinition = "TEXT")
     private String planRu;
 
-    @Column(name = "plan_eng")
+    @Column(name = "plan_eng", columnDefinition = "TEXT")
     private String planEng;
 
     @ManyToOne(targetEntity = Category.class, fetch = FetchType.LAZY)
