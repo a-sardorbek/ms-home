@@ -129,9 +129,9 @@ public class ProductService {
         productRes.setPlanUz(product.getPlanUz());
         productRes.setPlanRu(product.getPlanRu());
         productRes.setPlanEng(product.getPlanEng());
-        product.setAboutUz(product.getAboutUz());
-        product.setAboutRu(product.getAboutRu());
-        product.setAboutEng(product.getAboutEng());
+        productRes.setAboutUz(product.getAboutUz());
+        productRes.setAboutRu(product.getAboutRu());
+        productRes.setAboutEng(product.getAboutEng());
         productRes.setCategory(categoryRes);
         productRes.setPhoto(new ImageRes(imageProducts, imagePlans));
 
@@ -176,9 +176,9 @@ public class ProductService {
                     productRes.setPlanUz(product.getPlanUz());
                     productRes.setPlanRu(product.getPlanRu());
                     productRes.setPlanEng(product.getPlanEng());
-                    product.setAboutUz(product.getAboutUz());
-                    product.setAboutRu(product.getAboutRu());
-                    product.setAboutEng(product.getAboutEng());
+                    productRes.setAboutUz(product.getAboutUz());
+                    productRes.setAboutRu(product.getAboutRu());
+                    productRes.setAboutEng(product.getAboutEng());
                     productRes.setCategory(categoryRes);
                     productRes.setPhoto(new ImageRes(imageProducts, imagePlans));
                     return productRes;
