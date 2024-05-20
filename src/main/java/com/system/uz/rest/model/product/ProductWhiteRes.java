@@ -13,5 +13,6 @@ public class ProductWhiteRes {
     private String title;
     private Integer size;
     private String planDescription;
+    private String about;
     private ImageRes photo;
 }

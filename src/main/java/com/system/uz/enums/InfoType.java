@@ -29,6 +29,34 @@ public enum InfoType {
         }
     },
 
+    ADVANTAGE {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Afzalliklari";
+                case ENG:
+                    return "Advantages";
+                default:
+                    return "Премиущества";
+            }
+        }
+    },
+
+    COMPANY {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Kompaniya Xaqida";
+                case ENG:
+                    return "About Company";
+                default:
+                    return "О компании";
+            }
+        }
+    },
+
     PRODUCTION{
         @Override
         public String getName(TelegramLang language) {

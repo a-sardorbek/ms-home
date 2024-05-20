@@ -22,6 +22,7 @@ public interface MessageKey {
     String MINIO_FAILED = "file.failed";
     String IMAGE_NOT_FOUND = "file.not.found";
     String PHONE_ALREADY_EXISTS = "phone.already.exist";
+    String CONTACT_ALREADY_EXISTS = "contact.already.exist";
     String PHONE_INCORRECT_FORMAT = "phone.incorrect.format";
     String BLOG_TYPE_CANNOT_BE_APPLIED = "blog.type.not.acceptable.for.product";
     String FILE_CANNOT_BE_EMPTY = "file.cannot.be.empty";

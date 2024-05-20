@@ -32,6 +32,15 @@ public class ProductCreateReq {
     @NotBlank(message = "plan_eng is mandatory")
     private String planEng;
 
+    @NotBlank(message = "about_uz is mandatory")
+    private String aboutUz;
+
+    @NotBlank(message = "about_ru is mandatory")
+    private String aboutRu;
+
+    @NotBlank(message = "about_eng is mandatory")
+    private String aboutEng;
+
     @NotBlank(message = "category_id")
     private String categoryId;
 }

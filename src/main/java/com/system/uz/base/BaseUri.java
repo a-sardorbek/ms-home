@@ -9,6 +9,7 @@ public interface BaseUri {
     String PRODUCT = "/product";
     String CLIENT = "/client";
     String BLOG = "/blog";
+    String CONTACT = "/contact";
     String FREQUENT = "/frequent";
     String ACTIVATION = "/activation";
     String ADD_PHOTO = "/add-photo";

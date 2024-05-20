@@ -62,6 +62,9 @@ public class ProductService {
         product.setPlanUz(req.getPlanUz());
         product.setPlanRu(req.getPlanRu());
         product.setPlanEng(req.getPlanEng());
+        product.setAboutUz(req.getAboutUz());
+        product.setAboutRu(req.getAboutRu());
+        product.setAboutEng(req.getAboutEng());
         product.setCategoryId(req.getCategoryId());
 
         productRepository.save(product);
@@ -86,6 +89,9 @@ public class ProductService {
         product.setPlanUz(req.getPlanUz());
         product.setPlanRu(req.getPlanRu());
         product.setPlanEng(req.getPlanEng());
+        product.setAboutUz(req.getAboutUz());
+        product.setAboutRu(req.getAboutRu());
+        product.setAboutEng(req.getAboutEng());
         product.setCategoryId(req.getCategoryId());
 
         productRepository.save(product);
@@ -123,6 +129,9 @@ public class ProductService {
         productRes.setPlanUz(product.getPlanUz());
         productRes.setPlanRu(product.getPlanRu());
         productRes.setPlanEng(product.getPlanEng());
+        product.setAboutUz(product.getAboutUz());
+        product.setAboutRu(product.getAboutRu());
+        product.setAboutEng(product.getAboutEng());
         productRes.setCategory(categoryRes);
         productRes.setPhoto(new ImageRes(imageProducts, imagePlans));
 
@@ -167,6 +176,9 @@ public class ProductService {
                     productRes.setPlanUz(product.getPlanUz());
                     productRes.setPlanRu(product.getPlanRu());
                     productRes.setPlanEng(product.getPlanEng());
+                    product.setAboutUz(product.getAboutUz());
+                    product.setAboutRu(product.getAboutRu());
+                    product.setAboutEng(product.getAboutEng());
                     productRes.setCategory(categoryRes);
                     productRes.setPhoto(new ImageRes(imageProducts, imagePlans));
                     return productRes;
@@ -375,6 +387,7 @@ public class ProductService {
         productRes.setSize(product.getSize());
         productRes.setTitle(Utils.getLanguage(product.getTitleUz(), product.getTitleRu(), product.getTitleEng()));
         productRes.setPlanDescription(Utils.getLanguage(product.getPlanUz(), product.getPlanRu(), product.getPlanEng()));
+        productRes.setAbout(Utils.getLanguage(product.getAboutUz(), product.getAboutRu(), product.getAboutEng()));
         productRes.setPhoto(new ImageRes(imageProducts, imagePlans));
 
         return ResponseEntity.ok(productRes);

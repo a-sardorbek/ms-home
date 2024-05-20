@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             API_V1 + LOGIN,
             API_V1 + LOGOUT,
             API_V1 + RESET_PASSWORD,
+            API_V1 + CONTACT,
             API_V1 + FILE,
             API_V1 + FILE + PHOTO,
             API_V1 + BLOG + LIST,
