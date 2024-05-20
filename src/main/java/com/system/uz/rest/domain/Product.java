@@ -42,10 +42,10 @@ public class Product extends BaseEntity {
     @Column(name = "plan_eng", columnDefinition = "TEXT")
     private String planEng;
 
-    @Column(name = "about_uz", columnDefinition = "TEXT")
+    @Column(name = "about_uz", columnDefinition = "TEXT DEFAULT ' Product Info'")
     private String aboutUz;
 
-    @Column(name = "about_ru", columnDefinition = "TEXT")
+    @Column(name = "about_ru", columnDefinition = "TEXT DEFAULT ' Product Info'")
     private String aboutRu;
 
     @Column(name = "about_eng", columnDefinition = "TEXT DEFAULT ' Product Info'")
