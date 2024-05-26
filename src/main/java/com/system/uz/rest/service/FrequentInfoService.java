@@ -1,6 +1,7 @@
 package com.system.uz.rest.service;
 
 import com.system.uz.enums.InfoType;
+import com.system.uz.exceptions.BadRequestException;
 import com.system.uz.exceptions.NotFoundException;
 import com.system.uz.global.MessageKey;
 import com.system.uz.global.PagingResponse;
@@ -34,6 +35,18 @@ public class FrequentInfoService {
     private final FrequentInfoRepository frequentInfoRepository;
 
     public void create(FrequentCreateReq req) {
+
+        if (req.getType().equals(InfoType.MAINPAGE)
+                || req.getType().equals(InfoType.CALLBACK)
+                || req.getType().equals(InfoType.ABOUTUS)) {
+
+            long count = frequentInfoRepository.countByType(req.getType());
+            if (count > 1) {
+                throw new BadRequestException(MessageKey.ALREADY_EXIST);
+            }
+        }
+
+
         FrequentInfo frequent = new FrequentInfo();
         frequent.setInfoId(Utils.generateToken());
         frequent.setQuestionUz(req.getQuestionUz());

@@ -26,4 +26,5 @@ public interface MessageKey {
     String PHONE_INCORRECT_FORMAT = "phone.incorrect.format";
     String BLOG_TYPE_CANNOT_BE_APPLIED = "blog.type.not.acceptable.for.product";
     String FILE_CANNOT_BE_EMPTY = "file.cannot.be.empty";
+    String ALREADY_EXIST = "already.exist";
 }

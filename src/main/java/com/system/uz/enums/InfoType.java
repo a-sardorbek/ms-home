@@ -57,6 +57,50 @@ public enum InfoType {
         }
     },
 
+    MAINPAGE {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Asosiy";
+                case ENG:
+                    return "Main";
+                default:
+                    return "Оснавной";
+            }
+        }
+    },
+
+
+    CALLBACK {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Qayta aloqa";
+                case ENG:
+                    return "Order call back";
+                default:
+                    return "обратный звонок";
+            }
+        }
+    },
+
+
+    ABOUTUS {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Biz haqimizda";
+                case ENG:
+                    return "About Us";
+                default:
+                    return "О нас";
+            }
+        }
+    },
+
     PRODUCTION{
         @Override
         public String getName(TelegramLang language) {

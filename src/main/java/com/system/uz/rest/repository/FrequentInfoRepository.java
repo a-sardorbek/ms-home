@@ -18,4 +18,6 @@ public interface FrequentInfoRepository extends JpaRepository<FrequentInfo, Long
     List<FrequentInfo> findAllByType(InfoType type);
 
     List<FrequentInfo> findTop10ByTypeOrderByIdDesc(InfoType infoType);
+
+    long countByType(InfoType type);
 }
