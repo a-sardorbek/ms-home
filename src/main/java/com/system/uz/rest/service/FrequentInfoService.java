@@ -41,7 +41,7 @@ public class FrequentInfoService {
                 || req.getType().equals(InfoType.ABOUTUS)) {
 
             long count = frequentInfoRepository.countByType(req.getType());
-            if (count > 1) {
+            if (count >= 1) {
                 throw new BadRequestException(MessageKey.ALREADY_EXIST);
             }
         }
