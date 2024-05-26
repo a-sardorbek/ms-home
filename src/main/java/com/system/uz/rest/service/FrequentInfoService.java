@@ -140,8 +140,10 @@ public class FrequentInfoService {
 
     public ResponseEntity<List<FrequentShortWhiteRes>> getWhiteList(InfoType type) {
 
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+
         List<FrequentInfo> frequentInfos;
-        frequentInfos = frequentInfoRepository.findAllByType(type);
+        frequentInfos = frequentInfoRepository.findAllByType(type, sort);
         List<FrequentShortWhiteRes> frequentResList = new ArrayList<>();
         for (FrequentInfo frequentInfo : frequentInfos) {
             frequentResList.add(new FrequentShortWhiteRes(
