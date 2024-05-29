@@ -26,6 +26,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -244,6 +245,12 @@ public class TelegramService {
             row.add(contactButton);
             keyboard.add(row);
         } else {
+
+            KeyboardRow row0 = new KeyboardRow();
+            KeyboardButton websiteButtons = new KeyboardButton();
+            websiteButtons.setText(TelegramMessage.OPEN_WEB_VIEW.getName(lang));
+            row0.add(websiteButtons);
+
             KeyboardRow row1 = new KeyboardRow();
             KeyboardButton languageButtons = new KeyboardButton();
             languageButtons.setText(TelegramMessage.CHANGE_LANGUAGE.getName(lang));
@@ -263,6 +270,7 @@ public class TelegramService {
             keyboard.add(row3);
             keyboard.add(row2);
             keyboard.add(row1);
+            keyboard.add(row0);
         }
 
         keyboardMarkup.setKeyboard(keyboard);
@@ -270,6 +278,8 @@ public class TelegramService {
 
         return keyboardMarkup;
     }
+
+
 
     public InlineKeyboardMarkup getLanguageInlineButtons() {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();

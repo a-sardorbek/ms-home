@@ -88,6 +88,20 @@ public enum TelegramMessage implements Serializable {
         }
     },
 
+    OPEN_WEB_VIEW {
+        @Override
+        public String getName(TelegramLang language) {
+            switch (language) {
+                case UZB:
+                    return "Veb Sahifamiz";
+                case ENG:
+                    return "Website";
+                default:
+                    return "Веб-сайт";
+            }
+        }
+    },
+
     CHANGE_LANGUAGE {
         @Override
         public String getName(TelegramLang language) {

@@ -18,6 +18,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.List;
 import java.util.Objects;
@@ -91,6 +93,10 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                     sendMessage.setText(TelegramMessage.CHANGE_LANGUAGE.getName(lang));
                     sendMessage.setReplyMarkup(telegramService.getLanguageInlineButtons());
                     sendMessage.setChatId(chatId);
+                    execute(sendMessage);
+                }else if (messageText.equals(TelegramMessage.OPEN_WEB_VIEW.getName(lang))) {
+                    sendMessage.setChatId(chatId);
+                    sendMessage.setText(TelegramMessage.OPEN_WEB_VIEW.getName(lang)+" https://mshome.uz");
                     execute(sendMessage);
                 } else if (messageText.equals(TelegramMessage.FREQUENT_INFO.getName(lang))) {
                     sendMessage.setText(TelegramMessage.FREQUENT_INFO.getName(lang));
