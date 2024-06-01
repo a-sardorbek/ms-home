@@ -149,7 +149,7 @@ public class FrequentInfoService {
             frequentResList.add(new FrequentShortWhiteRes(
                     frequentInfo.getInfoId(),
                     Utils.getLanguage(frequentInfo.getQuestionUz(), frequentInfo.getQuestionRu(), frequentInfo.getQuestionEng()),
-                    Utils.getLanguage(frequentInfo.getAnswerUz(), frequentInfo.getAnswerRu(), frequentInfo.getQuestionEng()),
+                    Utils.getLanguage(frequentInfo.getAnswerUz(), frequentInfo.getAnswerRu(), frequentInfo.getAnswerEng()),
                     frequentInfo.getType()
             ));
         }
