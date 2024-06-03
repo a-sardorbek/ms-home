@@ -23,11 +23,23 @@ public class ContactUpdateReq {
     @NotBlank(message = "Email is mandatory")
     private String email;
 
-    @NotBlank(message = "Main office is mandatory")
-    private String mainOffice;
+    @NotBlank(message = "Main officeUz is mandatory")
+    private String mainOfficeUz;
 
-    @NotBlank(message = "Production office is mandatory")
-    private String productionOffice;
+    @NotBlank(message = "Main officeRu is mandatory")
+    private String mainOfficeRu;
+
+    @NotBlank(message = "Main officeEng is mandatory")
+    private String mainOfficeEng;
+
+    @NotBlank(message = "Production officeUz  is mandatory")
+    private String productionOfficeUz;
+
+    @NotBlank(message = "Production officeRu  is mandatory")
+    private String productionOfficeRu;
+
+    @NotBlank(message = "Production officeEng  is mandatory")
+    private String productionOfficeEng;
 
     @NotBlank(message = "Description uz is mandatory")
     private String descriptionUz;

@@ -32,10 +32,22 @@ public class Contact extends BaseEntity {
     private String email;
 
     @Column(name = "main_office")
-    private String mainOffice;
+    private String mainOffice;  // uz
+
+    @Column(name = "main_office_ru")
+    private String mainOfficeRu;
+
+    @Column(name = "main_office_eng")
+    private String mainOfficeEng;
 
     @Column(name = "production_office")
-    private String productionOffice;
+    private String productionOffice;  //uz
+
+    @Column(name = "production_office_ru")
+    private String productionOfficeRu;
+
+    @Column(name = "production_office_eng")
+    private String productionOfficeEng;
 
     @Column(name = "description_uz", columnDefinition = "TEXT")
     private String descriptionUz;

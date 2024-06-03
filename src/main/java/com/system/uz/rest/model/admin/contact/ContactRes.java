@@ -13,8 +13,12 @@ public class ContactRes {
     private String firstPhone;
     private String secondPhone;
     private String email;
-    private String mainOffice;
-    private String productionOffice;
+    private String mainOfficeUz;
+    private String mainOfficeRu;
+    private String mainOfficeEng;
+    private String productionOfficeUz;
+    private String productionOfficeRu;
+    private String productionOfficeEng;
     private String descriptionUz;
     private String descriptionRu;
     private String descriptionEng;

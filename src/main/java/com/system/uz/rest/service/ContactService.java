@@ -36,8 +36,12 @@ public class ContactService {
         contact.setEmail(req.getEmail());
         contact.setFirstPhone(req.getFirstPhone());
         contact.setSecondPhone(req.getSecondPhone());
-        contact.setMainOffice(req.getMainOffice());
-        contact.setProductionOffice(req.getProductionOffice());
+        contact.setMainOffice(req.getMainOfficeUz());
+        contact.setMainOfficeRu(req.getMainOfficeRu());
+        contact.setMainOfficeEng(req.getMainOfficeEng());
+        contact.setProductionOffice(req.getProductionOfficeUz());
+        contact.setProductionOfficeRu(req.getProductionOfficeRu());
+        contact.setProductionOfficeEng(req.getProductionOfficeEng());
         contact.setContactId(Utils.generateToken());
         contact.setDescriptionUz(req.getDescriptionUz());
         contact.setDescriptionRu(req.getDescriptionRu());
@@ -55,8 +59,12 @@ public class ContactService {
         contact.setEmail(req.getEmail());
         contact.setFirstPhone(req.getFirstPhone());
         contact.setSecondPhone(req.getSecondPhone());
-        contact.setMainOffice(req.getMainOffice());
-        contact.setProductionOffice(req.getProductionOffice());
+        contact.setMainOffice(req.getMainOfficeUz());
+        contact.setMainOfficeRu(req.getMainOfficeRu());
+        contact.setMainOfficeEng(req.getMainOfficeEng());
+        contact.setProductionOffice(req.getProductionOfficeUz());
+        contact.setProductionOfficeRu(req.getProductionOfficeRu());
+        contact.setProductionOfficeEng(req.getProductionOfficeEng());
         contact.setDescriptionUz(req.getDescriptionUz());
         contact.setDescriptionRu(req.getDescriptionRu());
         contact.setDescriptionEng(req.getDescriptionEng());
@@ -74,7 +82,11 @@ public class ContactService {
                     contact.getSecondPhone(),
                     contact.getEmail(),
                     contact.getMainOffice(),
+                    contact.getMainOfficeRu(),
+                    contact.getMainOfficeEng(),
                     contact.getProductionOffice(),
+                    contact.getProductionOfficeRu(),
+                    contact.getProductionOfficeEng(),
                     contact.getDescriptionUz(),
                     contact.getDescriptionRu(),
                     contact.getDescriptionEng()
@@ -97,7 +109,11 @@ public class ContactService {
                 contact.getSecondPhone(),
                 contact.getEmail(),
                 contact.getMainOffice(),
+                contact.getMainOfficeRu(),
+                contact.getMainOfficeEng(),
                 contact.getProductionOffice(),
+                contact.getProductionOfficeRu(),
+                contact.getProductionOfficeEng(),
                 contact.getDescriptionUz(),
                 contact.getDescriptionRu(),
                 contact.getDescriptionEng()
@@ -126,8 +142,8 @@ public class ContactService {
                 contact.getFirstPhone(),
                 contact.getSecondPhone(),
                 contact.getEmail(),
-                contact.getMainOffice(),
-                contact.getProductionOffice(),
+                Utils.getLanguage(contact.getMainOffice(), contact.getMainOfficeRu(), contact.getMainOfficeEng()),
+                Utils.getLanguage(contact.getProductionOffice(), contact.getProductionOfficeRu(), contact.getProductionOfficeEng()),
                 Utils.getLanguage(contact.getDescriptionUz(),contact.getDescriptionRu(), contact.getDescriptionEng())
         );
 
