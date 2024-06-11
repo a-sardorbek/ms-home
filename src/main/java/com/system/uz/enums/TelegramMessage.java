@@ -37,11 +37,11 @@ public enum TelegramMessage implements Serializable {
         public String getName(TelegramLang language) {
             switch (language) {
                 case UZB:
-                    return "⬇\uFE0F Pastda joylashgan tugmani bosing";
+                    return "⬇\uFE0F Iltimos tilni uzgartiring";
                 case ENG:
-                    return "⬇\uFE0F Click the buttons below";
+                    return "⬇\uFE0F Change the language please";
                 default:
-                    return "⬇\uFE0F Нажмите кнопки ниже";
+                    return "⬇\uFE0F Измените язык, пожалуйста";
             }
         }
     },

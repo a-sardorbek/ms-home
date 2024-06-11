@@ -171,7 +171,7 @@ public class TelegramService {
             productIds.add(product.getProductId());
         }
 
-        List<Image> images = imageRepository.findAllByProductIdIn(productIds);
+        List<Image> images = imageRepository.findTop8ByProductIdIn(productIds);
 
         TelegramLang lang = TelegramLang.RUS;
         Optional<User> optionalUser = userRepository.findByTelegramChatId(chatId);
@@ -187,7 +187,7 @@ public class TelegramService {
 
         for (Image image : images) {
             SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(chatId);
+            sendMessage.setChatId(String.valueOf(lang));
             sendMessage.setText(image.getFullPath());
             sendMessage.setReplyMarkup(getReplyButtons(lang, false));
             sendMessages.add(sendMessage);

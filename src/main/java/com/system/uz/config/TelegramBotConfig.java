@@ -61,6 +61,7 @@ public class TelegramBotConfig extends TelegramLongPollingBot {
                 } else {
                     for (SendMessage sendMess : sendMessages) {
                         SendPhoto sendPhoto = telegramService.getFileFromMinio(chatId, sendMess.getText());
+                        sendPhoto.setReplyMarkup(telegramService.getReplyButtons(TelegramLang.valueOf(sendMess.getChatId()), false));
                         if (Objects.nonNull(sendPhoto)) {
                             execute(sendPhoto);
                         }
