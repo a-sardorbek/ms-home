@@ -27,8 +27,8 @@ auth:
     role: SS_MS_HOME
 
 telegram:
-    token: ${TELEGRAM_TOKEN:6949165094:AAGXvm-YXMAXlPKHxEGXJQT9CE1-xzWjK6I}
-    username: ${TELEGRAM_USERNAME:mshome_uzbot}
+    token: ${TELEGRAM_TOKEN:4566}
+    username: ${TELEGRAM_USERNAME:ms}
 
 minio:
     url: ${MINIO_SERVICE_URL:http://localhost}
